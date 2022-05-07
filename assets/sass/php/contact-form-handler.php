@@ -1,59 +1,33 @@
 <?php
+if(isset($_POST['email'])) {
 
-$errors = ”;
+// Debes editar las próximas dos líneas de código de acuerdo con tus preferencias
+$email_to = "j.loera99.jl@gmail.com";
+$email_subject = "Contacto desde el sitio web";
 
-$myemail = ‘j.loera99.jl@gmail.com’;//<—–Put Your email address here. if(empty($_POST[‘name’]) ||
+// Aquí se deberían validar los datos ingresados por el usuario
+if(!isset($_POST['name']) ||
+!isset($_POST['email']) ||
+!isset($_POST['telephone']) ||
+!isset($_POST['comments'])) {
 
-empty($_POST[’email’]) ||
-
-empty($_POST[‘message’]))
-
-{
-
-$errors .= “\n Error: all fields are required”;
-
+echo "<b>Something is wrong </b><br />";
+echo "Try again!<br />";
+die();
 }
 
-$name = $_POST[‘name’];
+$email_message = "Detalles del formulario de contacto:\n\n";
+$email_message .= "Nombre: " . $_POST['name'] . "\n";
+$email_message .= "E-mail: " . $_POST['email'] . "\n";
+$email_message .= "Teléfono: " . $_POST['telephone'] . "\n";
+$email_message .= "Comentarios: " . $_POST['message'] . "\n\n";
 
-$email_address = $_POST[’email’];
+// Ahora se envía el e-mail usando la función mail() de PHP
+$headers = 'From: '.$email_from."\r\n".
+'Reply-To: '.$email_from."\r\n" .
+'X-Mailer: PHP/' . phpversion();
+@mail($email_to, $email_subject, $email_message, $headers);
 
-$message = $_POST[‘message’];
-
-if (!preg_match(
-
-“/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/i”, $email_address))
-
-{
-
-$errors .= “\n Error: Invalid email address”;
-
+echo "Success!";
 }
-
-if( empty($errors))
-
-{
-
-$to = $myemail;
-
-$email_subject = “Contact form submission: $name”;
-
-$email_body = “You have received a new message. “.
-
-” Here are the details:\n Name: $name \n “.
-
-“Email: $email_address\n Message \n $message”;
-
-$headers = “From: $myemail\n”;
-
-$headers .= “Reply-To: $email_address”;
-
-mail($to,$email_subject,$email_body,$headers);
-
-//redirect to the ‘thank you’ page
-
-header(‘Location: contact-form-thank-you.html’);
-
-}
-
 ?>
